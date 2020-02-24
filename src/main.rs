@@ -39,7 +39,7 @@ struct Tgcd {
 }
 
 mod embedded {
-    refinery::embed_migrations!("tgcd-server/sql");
+    refinery::embed_migrations!("sql");
 }
 
 impl Tgcd {
