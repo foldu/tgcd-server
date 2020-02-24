@@ -1,0 +1,24 @@
+[package]
+name = "tgcd-server"
+version = "0.1.0"
+authors = ["foldu <foldu@protonmail.com>"]
+edition = "2018"
+license = "Unlicense OR MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "0.2.11", features = ["rt-threaded", "fs"] }
+futures-util = "0.3.1"
+thiserror = "1.0.10"
+tokio-postgres = { version = "0.5.2" }
+envy = { version = "0.4.1" }
+serde = { version = "1.0.104", features = ["derive"] }
+tonic = "0.1.1"
+deadpool-postgres = { version = "0.5.4" }
+refinery = { version = "0.2.0", features = ["tokio-postgres"] }
+refinery-migrations = { version = "0.2.0" }
+tgcd = { path = "../tgcd" }
+slog = "2.5.2"
+slog-scope = "4.3.0"
+slog-term = "2.5.0"
