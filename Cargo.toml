@@ -8,17 +8,17 @@ license = "Unlicense OR MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { version = "0.2.11", features = ["rt-threaded", "fs"] }
-futures-util = "0.3.1"
-thiserror = "1.0.10"
-tokio-postgres = { version = "0.5.2" }
-envy = { version = "0.4.1" }
-serde = { version = "1.0.104", features = ["derive"] }
-tonic = "0.1.1"
-deadpool-postgres = { version = "0.5.4" }
-refinery = { version = "0.2.0", features = ["tokio-postgres"] }
-refinery-migrations = { version = "0.2.0" }
+tokio = { version = "0.2.16", features = ["rt-threaded", "fs"] }
+futures-util = "0.3.4"
+thiserror = "1.0.14"
+tokio-postgres = "0.5.3"
+envy = "0.4.1"
+serde = { version = "1.0.106", features = ["derive"] }
+tonic = "0.2.0"
+deadpool-postgres = "0.5.5"
+refinery = { version = "0.2.1", features = ["tokio-postgres"] }
+refinery-migrations = "0.2.2"
 slog = "2.5.2"
 slog-scope = "4.3.0"
 slog-term = "2.5.0"
-tgcd = { git = "https://github.com/foldu/tgcd", rev = "e000f483e25dfedee348af04ee7b7cf2cdb64a1b" }
+tgcd = { git = "https://github.com/foldu/tgcd", rev = "e7800fed98727993447e5c875bc5b375e34b16d2" }
