@@ -1,16 +1,18 @@
 use deadpool_postgres::{Manager, Pool};
-use futures_util::{future, future::TryFutureExt};
+use futures_util::{
+    future,
+    future::{ TryFutureExt},
+    stream::{self, StreamExt},
+};
 use serde::Deserialize;
 use slog_scope::{crit, error};
 use std::{convert::TryFrom, sync::Arc};
 use tgcd::{
     raw::{tgcd_server, AddTags, GetMultipleTagsReq, GetMultipleTagsResp, Hash, SrcDest, Tags},
-    Blake2bHash,
-    HashError,
-    Tag,
-    TagError,
+    Blake2bHash, HashError, Tag, TagError,
 };
 use thiserror::Error;
+use tokio::signal::unix::{signal, SignalKind};
 use tokio_postgres as postgres;
 use tonic::{transport::Server, Request, Response, Status};
 
@@ -88,6 +90,9 @@ pub enum SetupError {
 
     #[error("Can't bind server: {0}")]
     Bind(#[from] tonic::transport::Error),
+
+    #[error("Can't register signal: {0}")]
+    Signal(std::io::Error),
 }
 
 #[derive(Error, Debug)]
@@ -280,9 +285,18 @@ async fn run() -> Result<(), SetupError> {
     let config: Config = envy::from_env()?;
     let tgcd = Tgcd::new(&config).await?;
 
+    let signals = [SignalKind::interrupt(), SignalKind::terminate()]
+        .iter()
+        .map(|&signo| signal(signo))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(SetupError::Signal)?;
+    let terminate = async move {
+        stream::select_all(signals).next().await;
+    };
+
     Server::builder()
         .add_service(tgcd_server::TgcdServer::new(tgcd))
-        .serve(([0, 0, 0, 0], config.port).into())
+        .serve_with_shutdown(([0, 0, 0, 0], config.port).into(), terminate)
         .await?;
 
     Ok(())

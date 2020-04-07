@@ -8,7 +8,7 @@ license = "Unlicense OR MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { version = "0.2.16", features = ["rt-threaded", "fs"] }
+tokio = { version = "0.2.16", features = ["rt-threaded", "fs", "signal"] }
 futures-util = "0.3.4"
 thiserror = "1.0.14"
 tokio-postgres = "0.5.3"
