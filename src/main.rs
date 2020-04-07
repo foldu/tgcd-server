@@ -1,7 +1,7 @@
 use deadpool_postgres::{Manager, Pool};
 use futures_util::{
     future,
-    future::{ TryFutureExt},
+    future::TryFutureExt,
     stream::{self, StreamExt},
 };
 use serde::Deserialize;
@@ -15,6 +15,51 @@ use thiserror::Error;
 use tokio::signal::unix::{signal, SignalKind};
 use tokio_postgres as postgres;
 use tonic::{transport::Server, Request, Response, Status};
+
+async fn run() -> Result<(), SetupError> {
+    let config: Config = envy::from_env()?;
+    let tgcd = Tgcd::new(&config).await?;
+
+    let signals = [SignalKind::interrupt(), SignalKind::terminate()]
+        .iter()
+        .map(|&signo| signal(signo))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(SetupError::Signal)?;
+    let terminate = async move {
+        stream::select_all(signals).next().await;
+    };
+
+    Server::builder()
+        .add_service(tgcd_server::TgcdServer::new(tgcd))
+        .serve_with_shutdown(([0, 0, 0, 0], config.port).into(), terminate)
+        .await?;
+
+    Ok(())
+}
+
+fn main() {
+    use slog::Drain;
+    let decorator = slog_term::TermDecorator::new().build();
+    // FIXME: use async logger instead
+    let drain = std::sync::Mutex::new(slog_term::FullFormat::new(decorator).build())
+        .filter_level(slog::Level::Info)
+        .fuse();
+
+    let logger = slog::Logger::root(drain, slog::o!());
+
+    let _scope_guard = slog_scope::set_global_logger(logger);
+
+    let mut rt = tokio::runtime::Builder::new()
+        .threaded_scheduler()
+        .enable_io()
+        .enable_time()
+        .build()
+        .unwrap();
+    if let Err(e) = rt.block_on(run()) {
+        crit!("{}", e);
+        std::process::exit(1);
+    }
+}
 
 #[derive(Deserialize)]
 struct Config {
@@ -278,50 +323,5 @@ impl tgcd_server::Tgcd for Tgcd {
         txn.commit().await.map_err(Error::Postgres)?;
 
         Ok(Response::new(()))
-    }
-}
-
-async fn run() -> Result<(), SetupError> {
-    let config: Config = envy::from_env()?;
-    let tgcd = Tgcd::new(&config).await?;
-
-    let signals = [SignalKind::interrupt(), SignalKind::terminate()]
-        .iter()
-        .map(|&signo| signal(signo))
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(SetupError::Signal)?;
-    let terminate = async move {
-        stream::select_all(signals).next().await;
-    };
-
-    Server::builder()
-        .add_service(tgcd_server::TgcdServer::new(tgcd))
-        .serve_with_shutdown(([0, 0, 0, 0], config.port).into(), terminate)
-        .await?;
-
-    Ok(())
-}
-
-fn main() {
-    use slog::Drain;
-    let decorator = slog_term::TermDecorator::new().build();
-    // FIXME: use async logger instead
-    let drain = std::sync::Mutex::new(slog_term::FullFormat::new(decorator).build())
-        .filter_level(slog::Level::Info)
-        .fuse();
-
-    let logger = slog::Logger::root(drain, slog::o!());
-
-    let _scope_guard = slog_scope::set_global_logger(logger);
-
-    let mut rt = tokio::runtime::Builder::new()
-        .threaded_scheduler()
-        .enable_io()
-        .enable_time()
-        .build()
-        .unwrap();
-    if let Err(e) = rt.block_on(run()) {
-        crit!("{}", e);
-        std::process::exit(1);
     }
 }
