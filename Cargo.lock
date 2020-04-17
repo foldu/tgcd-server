@@ -1272,7 +1272,7 @@ dependencies = [
 [[package]]
 name = "tgcd"
 version = "0.1.0"
-source = "git+https://github.com/foldu/tgcd?rev=e7800fed98727993447e5c875bc5b375e34b16d2#e7800fed98727993447e5c875bc5b375e34b16d2"
+source = "git+https://github.com/foldu/tgcd?rev=267f03adb3b39031f0c02ce7920228189004591b#267f03adb3b39031f0c02ce7920228189004591b"
 dependencies = [
  "blake2b_simd 0.5.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "directories 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1301,7 +1301,7 @@ dependencies = [
  "slog 2.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "slog-scope 4.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "slog-term 2.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "tgcd 0.1.0 (git+https://github.com/foldu/tgcd?rev=e7800fed98727993447e5c875bc5b375e34b16d2)",
+ "tgcd 0.1.0 (git+https://github.com/foldu/tgcd?rev=267f03adb3b39031f0c02ce7920228189004591b)",
  "thiserror 1.0.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-postgres 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1947,7 +1947,7 @@ dependencies = [
 "checksum syn 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)" = "0df0eb663f387145cab623dea85b09c2c5b4b0aef44e945d928e682fce71bb03"
 "checksum tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7a6e24d9338a0a5be79593e2fa15a648add6138caa803e2d5bc782c371732ca9"
 "checksum term 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)" = "c0863a3345e70f61d613eab32ee046ccd1bcc5f9105fe402c61fcd0c13eeb8b5"
-"checksum tgcd 0.1.0 (git+https://github.com/foldu/tgcd?rev=e7800fed98727993447e5c875bc5b375e34b16d2)" = "<none>"
+"checksum tgcd 0.1.0 (git+https://github.com/foldu/tgcd?rev=267f03adb3b39031f0c02ce7920228189004591b)" = "<none>"
 "checksum thiserror 1.0.14 (registry+https://github.com/rust-lang/crates.io-index)" = "f0570dc61221295909abdb95c739f2e74325e14293b2026b0a7e195091ec54ae"
 "checksum thiserror-impl 1.0.14 (registry+https://github.com/rust-lang/crates.io-index)" = "227362df41d566be41a28f64401e07a043157c21c14b9785a0d8e256f940a8fd"
 "checksum thread_local 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d40c6d1b69745a6ec6fb1ca717914848da4b44ae29d9b3080cbee91d72a69b14"

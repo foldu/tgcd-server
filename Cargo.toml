@@ -21,4 +21,4 @@ refinery-migrations = "0.2.2"
 slog = "2.5.2"
 slog-scope = "4.3.0"
 slog-term = "2.5.0"
-tgcd = { git = "https://github.com/foldu/tgcd", rev = "e7800fed98727993447e5c875bc5b375e34b16d2" }
+tgcd = { git = "https://github.com/foldu/tgcd", rev = "267f03adb3b39031f0c02ce7920228189004591b" }
