@@ -9,7 +9,10 @@ use slog_scope::{crit, error};
 use std::{convert::TryFrom, sync::Arc};
 use tgcd::{
     raw::{tgcd_server, AddTags, GetMultipleTagsReq, GetMultipleTagsResp, Hash, SrcDest, Tags},
-    Blake2bHash, HashError, Tag, TagError,
+    Blake2bHash,
+    HashError,
+    Tag,
+    TagError,
 };
 use thiserror::Error;
 use tokio::signal::unix::{signal, SignalKind};
@@ -127,7 +130,7 @@ pub enum SetupError {
     PostgresSchema(
         #[source]
         #[from]
-        refinery_migrations::Error,
+        refinery::Error,
     ),
 
     #[error("Missing environment variable: {0}")]
