@@ -14,6 +14,7 @@
         {
           defaultPackage = naersk.lib.${system}.buildPackage {
             src = ./.;
+            singleStep = true;
             buildInputs = [
               pkgs.protobuf
             ];
